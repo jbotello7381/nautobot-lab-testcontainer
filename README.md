@@ -6,7 +6,7 @@ Python Class to assist on Nautobot integration testing
 To install the package, clone the repository and use Poetry:
 
 ```bash
-git clone https://github.com/yourusername/nautobot-lab-testcontainer.git
+git clone https://github.com/jbotello7381/nautobot-lab-testcontainer.git
 cd nautobot-lab-testcontainer
 poetry install
 ```
@@ -14,7 +14,7 @@ poetry install
 Alternatively, you can add it directly via git:
 
 ```bash
-poetry add git+https://github.com/yourusername/nautobot-lab-testcontainer.git
+poetry add git+https://github.com/jbotello7381/nautobot-lab-testcontainer.git
 ```
 
 ## Usage
