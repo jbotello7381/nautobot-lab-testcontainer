@@ -15,6 +15,15 @@ pynautobot = "1.5.4"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.4"
+black = "^24.10.0"
+rust = "^1.3.1"
+ruff = "^0.8.4"
+
+[tool.ruff]
+line-length = 88
+select = ["E", "F", "I", "W"]  # Select specific rules
+ignore = ["E501"]  # Ignore specific rules
+fixable = ["I"]  # Auto-fix import sorting issues
 
 [build-system]
 requires = ["poetry-core"]
