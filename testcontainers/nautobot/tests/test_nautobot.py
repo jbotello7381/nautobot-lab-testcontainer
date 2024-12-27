@@ -1,18 +1,22 @@
-from pytest import fixture
+from typing import Any, Generator, List
+
 from pynautobot import api as NautobotApi
 from pynautobot.core.response import Record
-from typing import Any, List
-from testcontainers.nautobot import NautobotTestContainer
-from typing import Generator
+from pytest import fixture
 
-PynautobotObject = List[Record|Any] | Record | Any
+from testcontainers.nautobot import NautobotTestContainer
+
+PynautobotObject = List[Record | Any] | Record | Any
 
 TEST_IMAGE = "networktocode/nautobot-lab:1.6.2"
 DEFAULT_PORT = 8000
 
+
 @fixture(scope="module")
 def nautobot_container() -> Generator[NautobotTestContainer, Any, None]:
-    with NautobotTestContainer(image=TEST_IMAGE, port=DEFAULT_PORT) as nautobot_container:
+    with NautobotTestContainer(
+        image=TEST_IMAGE, port=DEFAULT_PORT
+    ) as nautobot_container:
         yield nautobot_container
 
 
@@ -28,10 +32,15 @@ def test_nautobot_version(nautobot_container):
     version = nautobot_container.exec("nautobot-server --version")[1]
     assert version.decode("utf-8").strip() == requested_version
 
+
 def test_create_circuit_in_nautobot(nautobot):
     try:
-        provider: PynautobotObject = nautobot.circuits.providers.create(name="TestProvider")
-        circuit_type: PynautobotObject = nautobot.circuits.circuit_types.create(name="backbone")
+        provider: PynautobotObject = nautobot.circuits.providers.create(
+            name="TestProvider"
+        )
+        circuit_type: PynautobotObject = nautobot.circuits.circuit_types.create(
+            name="backbone"
+        )
         circuit_data = {
             "cid": "CID0001",
             "provider": provider.id,
@@ -48,13 +57,20 @@ def test_create_circuit_in_nautobot(nautobot):
         provider.delete()
         circuit_type.delete()
 
+
 def test_create_device_in_nautobot(nautobot):
     try:
         platform: PynautobotObject = nautobot.dcim.platforms.create(name="JimbOS")
-        manufacturer: PynautobotObject = nautobot.dcim.manufacturers.create(name="jimbox")
-        device_type: PynautobotObject = nautobot.dcim.device_types.create(model="router", slug="router", manufacturer=manufacturer.id)
+        manufacturer: PynautobotObject = nautobot.dcim.manufacturers.create(
+            name="jimbox"
+        )
+        device_type: PynautobotObject = nautobot.dcim.device_types.create(
+            model="router", slug="router", manufacturer=manufacturer.id
+        )
         device_role: PynautobotObject = nautobot.dcim.device_roles.create(name="core")
-        site: PynautobotObject = nautobot.dcim.sites.create(name="TestSite", status="active")
+        site: PynautobotObject = nautobot.dcim.sites.create(
+            name="TestSite", status="active"
+        )
 
         device_data = {
             "name": "NodeA",
@@ -75,11 +91,18 @@ def test_create_device_in_nautobot(nautobot):
     finally:
         device.delete()
 
+
 def test_get_circuit_from_nautobot(nautobot):
     try:
-        provider1: PynautobotObject = nautobot.circuits.providers.create(name="TestProvider1")
-        provider2: PynautobotObject = nautobot.circuits.providers.create(name="TestProvider2")
-        circuit_type: PynautobotObject = nautobot.circuits.circuit_types.create(name="backbone")
+        provider1: PynautobotObject = nautobot.circuits.providers.create(
+            name="TestProvider1"
+        )
+        provider2: PynautobotObject = nautobot.circuits.providers.create(
+            name="TestProvider2"
+        )
+        circuit_type: PynautobotObject = nautobot.circuits.circuit_types.create(
+            name="backbone"
+        )
         circuit_data1 = {
             "cid": "CID0001",
             "provider": provider1.id,
@@ -107,4 +130,3 @@ def test_get_circuit_from_nautobot(nautobot):
         provider1.delete()
         provider2.delete()
         circuit_type.delete()
-

@@ -1,7 +1,8 @@
-from testcontainers.core.container import DockerContainer
-from testcontainers.core.waiting_utils import wait_container_is_ready
-from testcontainers.core.utils import raise_for_deprecated_parameter
 import requests
+
+from testcontainers.core.container import DockerContainer
+from testcontainers.core.utils import raise_for_deprecated_parameter
+from testcontainers.core.waiting_utils import wait_container_is_ready
 
 
 class NautobotTestContainer(DockerContainer):
@@ -20,13 +21,13 @@ class NautobotTestContainer(DockerContainer):
     Methods:
         start() -> "NautobotTestContainer":
             Starts the Nautobot container and waits for it to be healthy.
-        
+
         _wait_for_health_check() -> None:
             Waits for the Nautobot container to pass its health check.
-        
+
         stdout() -> str:
             Returns the standard output logs of the Nautobot container.
-        
+
         stderr() -> str:
             Returns the standard error logs of the Nautobot container.
     """
@@ -34,7 +35,9 @@ class NautobotTestContainer(DockerContainer):
     DEFAULT_IMAGE = "networktocode/nautobot-lab:latest"
     DEFAULT_PORT = 8000
 
-    def __init__(self, image: str = DEFAULT_IMAGE, port: int = DEFAULT_PORT, **kwargs) -> None:
+    def __init__(
+        self, image: str = DEFAULT_IMAGE, port: int = DEFAULT_PORT, **kwargs
+    ) -> None:
         raise_for_deprecated_parameter(kwargs, "port_to_expose", "port")
         super().__init__(image, **kwargs)
         self.port = port
@@ -54,7 +57,7 @@ class NautobotTestContainer(DockerContainer):
         self._wait_for_health_check()
         print(f"Nautobot test container is ready for use at {self.url}")
         return self
-        
+
     @property
     def stdout(self) -> str:
         return self.get_logs()[0].decode("utf-8")
@@ -62,4 +65,3 @@ class NautobotTestContainer(DockerContainer):
     @property
     def stderr(self) -> str:
         return self.get_logs()[1].decode("utf-8")
-
