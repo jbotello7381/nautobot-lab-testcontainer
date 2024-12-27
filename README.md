@@ -39,7 +39,7 @@ def nautobot_container() -> Generator[NautobotTestContainer, Any, None]:
 
 def test_nautobot_version(nautobot_container):
     requested_version = TEST_IMAGE.split(":")[1]
-    version = nautobot_container.exec("nautobot-server --version")[1]
+    version = nautobot_container.exec(["nautobot-server", "--version"])[1]
     assert version.decode("utf-8").strip() == requested_version
 ```
 
